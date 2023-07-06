@@ -10,17 +10,9 @@ namespace MathTool
     {
         static void Main(string[] args)
         {
-            string src = "123 + carea";
-            Console.WriteLine("Start!");
-            Stopwatch sw = new Stopwatch();
-            sw.Start();
-
-            for (int i = 0; i < 1_000_000; i++)
-            {
-                Token.Tokenize(src);
-            }
-            sw.Stop();
-            Console.WriteLine("Done! Elapsed Time: " + sw.ElapsedMilliseconds + "ms");
+            string src = "abc * 335 + 666";
+            
+            Console.WriteLine(Expr.GenTree(src));
 
         }
     }
