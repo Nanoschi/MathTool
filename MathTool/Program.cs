@@ -10,9 +10,10 @@ namespace MathTool
     {
         static void Main(string[] args)
         {
-            string src = "abc * 335 + 666";
-            
-            Console.WriteLine(Expr.GenTree(src));
+            string src = "5 - 1 + 6";
+            Expr e = Expr.GenTree(src);
+            Console.WriteLine(e);
+            Console.WriteLine(e.Eval());
 
         }
     }

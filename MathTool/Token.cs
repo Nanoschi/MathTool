@@ -29,6 +29,11 @@ namespace MathTool
             this.Value = value;
         }
 
+        public bool IsOperator()
+        {
+            return Type == TokenType.PLUS || Type == TokenType.MINUS || Type == TokenType.TIMES || Type == TokenType.DIVIDE;
+        }
+
         private static bool IsNumberPart(char c)
         {
             return char.IsDigit(c) || c == '.';

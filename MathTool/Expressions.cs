@@ -19,12 +19,8 @@ namespace MathTool
         public NodeType Type;
     }
 
-    abstract class Expr : Stmt 
-    {
-        private static bool IsTokenOperator(Token token)
-        {
-            return token.Type == TokenType.PLUS || token.Type == TokenType.MINUS || token.Type == TokenType.TIMES || token.Type == TokenType.DIVIDE;
-        }
+    abstract class Expr : Stmt
+    { 
         public static Expr GenTree(string expr)
         {
             return GenTree(Token.Tokenize(expr));
@@ -49,7 +45,7 @@ namespace MathTool
             {
                 Token token = tokens[i];
 
-                if (IsTokenOperator(token))
+                if (token.IsOperator())
                 {
                     List<Token> left = tokens.GetRange(0, i);
                     List<Token> right = tokens.GetRange(i + 1, tokens.Count - i - 1);
@@ -59,6 +55,8 @@ namespace MathTool
 
             return new IdentExpr(tokens[0].Value);
         }
+
+        public abstract double Eval();
     }
 
     class BinaryExpr : Expr
@@ -80,6 +78,24 @@ namespace MathTool
         {
             return $"({left} {op} {right})";
         }
+
+        public override double Eval()
+        {
+            switch (op)
+            {
+                case "+":
+                    return left.Eval() + right.Eval();
+                case "*":
+                    return left.Eval() * right.Eval();
+                case "/":
+                    return left.Eval() / right.Eval();
+                case "-":
+                    return left.Eval() - right.Eval();
+                default:
+                    Console.WriteLine("Unknown operator " + op);
+                    return 0;
+            }
+        }
     }
 
     class IdentExpr : Expr
@@ -93,6 +109,10 @@ namespace MathTool
 
         }
 
+        public override double Eval()
+        {
+            return 0;
+        }
         public override string ToString()
         {
             return ident;
@@ -108,6 +128,11 @@ namespace MathTool
             this.Type = NodeType.NUMBER;
             this.number = number;
 
+        }
+
+        public override double Eval()
+        {
+            return Convert.ToDouble(number);
         }
 
         public override string ToString()
