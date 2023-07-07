@@ -70,29 +70,23 @@ namespace MathTool
 
         public static void TrimParens(List<Token> tokens)
         {
-            int paren_depth = 0;
-            bool started_expr = false;
-            
-            for (int i = 0; i < tokens.Count; i++) 
+            int start_parens = 0;
+            int end_parens = 0;
+
+            for (int i = 0; tokens[i].Type == TokenType.L_PAREN && i < tokens.Count - 1; i++)
             {
-                Token token = tokens[i];
-
-                if (!(token.Type == TokenType.L_PAREN || token.Type == TokenType.R_PAREN))
-                {
-                    started_expr = true;
-                }
-
-                else if (token.Type == TokenType.L_PAREN)
-                {
-                    paren_depth++;
-                }
-
-                else if (token.Type == TokenType.R_PAREN)
-                {
-                    paren_depth--;
-                }
+                start_parens++; ;
             }
+
+            for (int i = tokens.Count - 1; tokens[i].Type == TokenType.R_PAREN && i > 0; i--)
+            {
+                end_parens++; ;
+            }
+
+            tokens.RemoveRange(0, start_parens);
+            tokens.RemoveRange(tokens.Count - end_parens, end_parens);
         }
+            
         public abstract double Eval();
     }
 

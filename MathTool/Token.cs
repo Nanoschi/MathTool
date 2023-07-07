@@ -44,6 +44,11 @@ namespace MathTool
             return Type == TokenType.PLUS || Type == TokenType.MINUS;
         }
 
+        public bool IsParen()
+        {
+            return Type == TokenType.R_PAREN || Type == TokenType.L_PAREN;
+        }
+
         private static bool IsNumberPart(char c)
         {
             return char.IsDigit(c) || c == '.';
@@ -165,7 +170,7 @@ namespace MathTool
 
         public override string ToString()
         {
-            return Value;
+            return Value + " ";
         }
     }
 }

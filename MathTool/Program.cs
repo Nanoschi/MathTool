@@ -10,21 +10,32 @@ namespace MathTool
     {
         static void Main(string[] args)
         {
-            string src = "2 - 2 * 10 - 20 + 5";
-            Expr e = Expr.GenTree(src);
-            Console.WriteLine(e);
-            Console.WriteLine(e.Eval());
-
-            Stopwatch stopwatch = new Stopwatch();
-            Console.WriteLine("Start!");
-            stopwatch.Start();
-
-            for (int i = 0; i < 1000; i++)
+            // Parser test
+            string src = "2 + 43 * 2";
+            Console.Write("Tokens: ");
+            List<Token> tokens = Token.Tokenize(src);
+            Expr.TrimParens(tokens);
+            foreach (Token t in tokens)
             {
-                e.Eval();
+                Console.Write(t);
             }
-            stopwatch.Stop();
-            Console.WriteLine("Done! Elapsed: " + stopwatch.ElapsedMilliseconds + "ms");
+
+            Console.WriteLine();
+            Expr e = Expr.GenTree(src);
+            Console.WriteLine("Tree: " + e);
+            Console.WriteLine("Value: " + e.Eval());
+
+            //// Performance test
+            //Stopwatch stopwatch = new Stopwatch();
+            //Console.WriteLine("Start!");
+            //stopwatch.Start();
+
+            //for (int i = 0; i < 1000; i++)
+            //{
+            //    e.Eval();
+            //}
+            //stopwatch.Stop();
+            //Console.WriteLine("Done! Elapsed: " + stopwatch.ElapsedMilliseconds + "ms");
 
         }
     }
