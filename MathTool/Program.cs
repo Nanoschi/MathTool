@@ -10,10 +10,21 @@ namespace MathTool
     {
         static void Main(string[] args)
         {
-            string src = "5 - 1 + 6";
+            string src = "2 * 10 + 2";
             Expr e = Expr.GenTree(src);
             Console.WriteLine(e);
             Console.WriteLine(e.Eval());
+
+            Stopwatch stopwatch = new Stopwatch();
+            Console.WriteLine("Start!");
+            stopwatch.Start();
+
+            for (int i = 0; i < 10_000_000; i++)
+            {
+                e.Eval();
+            }
+            stopwatch.Stop();
+            Console.WriteLine("Done! Elapsed: " + stopwatch.ElapsedMilliseconds + "ms");
 
         }
     }

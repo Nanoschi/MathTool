@@ -41,7 +41,7 @@ namespace MathTool
                 }
             }
 
-            for (int i = 0; i < tokens.Count; i++)
+            for (int i = tokens.Count - 1; i >= 0; i--)
             {
                 Token token = tokens[i];
 
