@@ -10,7 +10,7 @@ namespace MathTool
     {
         static void Main(string[] args)
         {
-            string src = "2 * 10 + 2";
+            string src = "2 - 2 * 10 - 20 + 5";
             Expr e = Expr.GenTree(src);
             Console.WriteLine(e);
             Console.WriteLine(e.Eval());
@@ -19,7 +19,7 @@ namespace MathTool
             Console.WriteLine("Start!");
             stopwatch.Start();
 
-            for (int i = 0; i < 10_000_000; i++)
+            for (int i = 0; i < 1000; i++)
             {
                 e.Eval();
             }

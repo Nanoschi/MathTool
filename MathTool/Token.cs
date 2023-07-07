@@ -34,6 +34,16 @@ namespace MathTool
             return Type == TokenType.PLUS || Type == TokenType.MINUS || Type == TokenType.TIMES || Type == TokenType.DIVIDE;
         }
 
+        public bool IsHighPrioOp()
+        {
+            return Type == TokenType.TIMES || Type == TokenType.DIVIDE;
+        }
+
+        public bool IsLowPrioOp()
+        {
+            return Type == TokenType.PLUS || Type == TokenType.MINUS;
+        }
+
         private static bool IsNumberPart(char c)
         {
             return char.IsDigit(c) || c == '.';

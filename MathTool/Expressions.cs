@@ -41,21 +41,58 @@ namespace MathTool
                 }
             }
 
+            int first_high_prio = -1;
+
+            List<Token> left;
+            List<Token> right;
             for (int i = tokens.Count - 1; i >= 0; i--)
             {
                 Token token = tokens[i];
 
-                if (token.IsOperator())
+                if (token.IsLowPrioOp())
                 {
-                    List<Token> left = tokens.GetRange(0, i);
-                    List<Token> right = tokens.GetRange(i + 1, tokens.Count - i - 1);
+                    left = tokens.GetRange(0, i);
+                    right = tokens.GetRange(i + 1, tokens.Count - i - 1);
                     return new BinaryExpr(token.Value, GenTree(left), GenTree(right));
+                }
+
+                else if (token.IsHighPrioOp() && first_high_prio == -1)
+                {
+                    first_high_prio = i;
                 }
             }
 
-            return new IdentExpr(tokens[0].Value);
+            left = tokens.GetRange(0, first_high_prio);
+            right = tokens.GetRange(first_high_prio + 1, tokens.Count - first_high_prio - 1);
+            return new BinaryExpr(tokens[first_high_prio].Value, GenTree(left), GenTree(right));
+
         }
 
+        public static void TrimParens(List<Token> tokens)
+        {
+            int paren_depth = 0;
+            bool started_expr = false;
+            
+            for (int i = 0; i < tokens.Count; i++) 
+            {
+                Token token = tokens[i];
+
+                if (!(token.Type == TokenType.L_PAREN || token.Type == TokenType.R_PAREN))
+                {
+                    started_expr = true;
+                }
+
+                else if (token.Type == TokenType.L_PAREN)
+                {
+                    paren_depth++;
+                }
+
+                else if (token.Type == TokenType.R_PAREN)
+                {
+                    paren_depth--;
+                }
+            }
+        }
         public abstract double Eval();
     }
 
