@@ -8,19 +8,19 @@ using System.Transactions;
 
 namespace MathTool
 {
-    enum NodeType
+    public enum NodeType
     {
         NUMBER,
         IDNTIFIER,
         BIN_EXPR
     }
-    abstract class Stmt
+    public abstract class Stmt
     {
         public NodeType Type;
     }
 
-    abstract class Expr : Stmt
-    { 
+    public abstract class Expr : Stmt
+    {
         public static Expr GenTree(string expr)
         {
             return GenTree(Token.Tokenize(expr));
@@ -28,6 +28,8 @@ namespace MathTool
 
         public static Expr GenTree(List<Token> tokens)
         {
+            TrimParens(tokens);
+
             if (tokens.Count == 1)
             {
                 if (tokens[0].Type == TokenType.NUMBER)
@@ -42,12 +44,27 @@ namespace MathTool
             }
 
             int first_high_prio = -1;
+            int paren_depth = 0;
 
             List<Token> left;
             List<Token> right;
             for (int i = tokens.Count - 1; i >= 0; i--)
             {
                 Token token = tokens[i];
+
+                if (token.Type == TokenType.R_PAREN)
+                {
+                    paren_depth++;
+                }
+                else if (token.Type == TokenType.L_PAREN)
+                {
+                    paren_depth--;
+                }
+
+                if (paren_depth > 0)
+                {
+                    continue;
+                }
 
                 if (token.IsLowPrioOp())
                 {
@@ -72,6 +89,7 @@ namespace MathTool
         {
             int start_parens = 0;
             int end_parens = 0;
+            int inner_paren_depth = 0;
 
             for (int i = 0; tokens[i].Type == TokenType.L_PAREN && i < tokens.Count - 1; i++)
             {
@@ -83,15 +101,31 @@ namespace MathTool
                 end_parens++; ;
             }
 
+            for (int i = start_parens; i < tokens.Count - end_parens; i++)
+            {
+                if (tokens[i].Type == TokenType.L_PAREN)
+                {
+                    inner_paren_depth++;
+                }
+                else if (tokens[i].Type == TokenType.R_PAREN && inner_paren_depth > 0)
+                {
+                    inner_paren_depth--;
+                }
+                else if (tokens[i].Type == TokenType.R_PAREN && inner_paren_depth == 0)
+                {
+                    start_parens--;
+                }
+            }
+
             tokens.RemoveRange(0, start_parens);
-            tokens.RemoveRange(tokens.Count - end_parens, end_parens);
+            tokens.RemoveRange(tokens.Count - start_parens, start_parens);
         }
-            
+
         public abstract double Eval();
     }
 
     class BinaryExpr : Expr
-    {       
+    {
         string op;
         Expr left;
         Expr right;
@@ -102,7 +136,7 @@ namespace MathTool
             this.left = left;
             this.right = right;
             this.op = op;
-            
+
         }
 
         public override string ToString()

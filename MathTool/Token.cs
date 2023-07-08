@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MathTool
 {
-    enum TokenType
+    public enum TokenType
     {
         NUMBER,
         IDENTIFIER,
@@ -18,7 +18,7 @@ namespace MathTool
         R_PAREN,
     }
 
-    struct Token
+    public struct Token
     {
         public TokenType Type;
         public string Value;

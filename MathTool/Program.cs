@@ -11,7 +11,7 @@ namespace MathTool
         static void Main(string[] args)
         {
             // Parser test
-            string src = "2 + 43 * 2";
+            string src = "(3 * 5 - (4 - 5) / (2 * 12) + ((3 * 6)))";
             Console.Write("Tokens: ");
             List<Token> tokens = Token.Tokenize(src);
             Expr.TrimParens(tokens);
