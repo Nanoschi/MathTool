@@ -11,7 +11,7 @@ namespace MathTool
         static void Main(string[] args)
         {
             // Parser test
-            string src = "(3 * 5 - (4 - 5) / (2 * 12) + ((3 * 6)))";
+            string src = "2 + 5";
             Console.Write("Tokens: ");
             List<Token> tokens = Token.Tokenize(src);
             Expr.TrimParens(tokens);
@@ -25,17 +25,19 @@ namespace MathTool
             Console.WriteLine("Tree: " + e);
             Console.WriteLine("Value: " + e.Eval());
 
-            //// Performance test
-            //Stopwatch stopwatch = new Stopwatch();
-            //Console.WriteLine("Start!");
-            //stopwatch.Start();
+            // Performance test
+            Stopwatch stopwatch = new Stopwatch();
+            Console.WriteLine("Start!");
+            stopwatch.Start();
 
-            //for (int i = 0; i < 1000; i++)
-            //{
-            //    e.Eval();
-            //}
-            //stopwatch.Stop();
-            //Console.WriteLine("Done! Elapsed: " + stopwatch.ElapsedMilliseconds + "ms");
+            for (int i = 0; i < 1_000_000_000; i++)
+            {
+                Values v = new Values(12);
+                v.incr(v.n);
+            }
+
+            stopwatch.Stop();
+            Console.WriteLine("Done! Elapsed: " + stopwatch.ElapsedMilliseconds + "ms");
 
         }
     }
