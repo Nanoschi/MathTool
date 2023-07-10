@@ -52,6 +52,7 @@ namespace MathTool
 
             List<Token> left;
             List<Token> right;
+
             for (int i = tokens.Count - 1; i >= 0; i--)
             {
                 Token token = tokens[i];
@@ -190,24 +191,49 @@ namespace MathTool
 
     class NumberExpr : Expr
     {
-        string number;
+        double number;
 
         public NumberExpr(string number)
         {
             this.Type = NodeType.NUMBER;
-            this.number = number;
+            this.number = double.Parse(number);
 
         }
 
         public override double Eval()
         {
-            return Convert.ToDouble(number);
+            return number;
+        }
+
+        private double DoubleFromString(string str)
+        {
+            double total = 0;
+            int period_pos = 0;
+            for (int i = 0; i < str.Length; i++)
+            {
+                if (str[i] == '.')
+                {
+                    period_pos = i;
+                    break;
+                }
+            }
+            for (int i = period_pos + 1; i < str.Length; i++)
+            {
+                total += (str[i] - '0') / Math.Pow(10.0, i);
+            }
+            for(int i = period_pos - 1; i > 0; i--)
+            {
+                total += (str[i] - '0') * Math.Pow(10.0, i);
+            }
+            return total;
         }
 
         public override string ToString()
         {
-            return number;
+            return number.ToString();
         }
+
+        
     }
 
 

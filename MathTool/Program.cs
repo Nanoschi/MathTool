@@ -12,35 +12,13 @@ namespace MathTool
     {
         static void Main(string[] args)
         {
-            // Parser test
-            string src = "2 + 5";
-            Console.Write("Tokens: ");
-            List<Token> tokens = Token.Tokenize(src);
-            Expr.TrimParens(tokens);
-            foreach (Token t in tokens)
-            {
-                Console.Write(t);
-            }
+            string expr = "((2 + 5.4)  * (3 - 5)) / 3.4 + 40 * 130 / 235";
+            Test.DisplayExpression(expr);
+            
+            Test.TimeCreateTree(expr);
+            Test.TimeEvalExpr(expr);
+            
             Test.RunFullParserTest();
-
-            Console.WriteLine();
-            Expr e = Expr.CreateTree(src);
-            Console.WriteLine("Tree: " + e);
-            Console.WriteLine("Value: " + e.Eval());
-
-            // Performance test
-            Stopwatch stopwatch = new Stopwatch();
-            Console.WriteLine("Start!");
-            stopwatch.Start();
-
-            for (int i = 0; i < 1_000_000_000; i++)
-            {
-                Values v = new Values(12);
-                v.incr(v.n);
-            }
-
-            stopwatch.Stop();
-            Console.WriteLine("Done! Elapsed: " + stopwatch.ElapsedMilliseconds + "ms");
 
         }
     }
