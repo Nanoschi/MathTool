@@ -56,7 +56,7 @@ namespace MathTool
 
         private static bool IsIdentPart(char c)
         {
-            return (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z');
+            return (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') || (c == '_');
         }
 
         public static List<Token> Tokenize(String expr)

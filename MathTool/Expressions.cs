@@ -8,19 +8,17 @@ using System.Transactions;
 
 namespace MathTool
 {
-    public enum NodeType
+    public enum ExprType
     {
         NUMBER,
         IDNTIFIER,
         BIN_EXPR
     }
-    public abstract class Stmt
-    {
-        public NodeType Type;
-    }
 
-    public abstract class Expr : Stmt
+    public abstract class Expr
     {
+        public ExprType Type;
+
         private static Expr CreateValueExpr(Token token)
         {
             if (token.Type == TokenType.NUMBER)
@@ -137,7 +135,7 @@ namespace MathTool
 
         public BinaryExpr(string op, Expr left, Expr right)
         {
-            this.Type = NodeType.BIN_EXPR;
+            this.Type = ExprType.BIN_EXPR;
             this.left = left;
             this.right = right;
             this.op = op;
@@ -174,7 +172,7 @@ namespace MathTool
 
         public IdentExpr(string ident)
         {
-            this.Type = NodeType.IDNTIFIER;
+            this.Type = ExprType.IDNTIFIER;
             this.ident = ident;
 
         }
@@ -195,7 +193,7 @@ namespace MathTool
 
         public NumberExpr(string number)
         {
-            this.Type = NodeType.NUMBER;
+            this.Type = ExprType.NUMBER;
             this.number = ExprConversions.StringToDouble(number);
 
         }
