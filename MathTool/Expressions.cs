@@ -196,7 +196,7 @@ namespace MathTool
         public NumberExpr(string number)
         {
             this.Type = NodeType.NUMBER;
-            this.number = double.Parse(number);
+            this.number = ExprConversions.StringToDouble(number);
 
         }
 
@@ -205,10 +205,20 @@ namespace MathTool
             return number;
         }
 
-        private double DoubleFromString(string str)
+        public override string ToString()
+        {
+            return number.ToString();
+        }
+
+        
+    }
+
+    public static class ExprConversions
+    {
+        public static double StringToDouble(string str)
         {
             double total = 0;
-            int period_pos = 0;
+            int period_pos = -1;
             for (int i = 0; i < str.Length; i++)
             {
                 if (str[i] == '.')
@@ -217,23 +227,24 @@ namespace MathTool
                     break;
                 }
             }
-            for (int i = period_pos + 1; i < str.Length; i++)
+
+            if (period_pos == -1)
             {
-                total += (str[i] - '0') / Math.Pow(10.0, i);
+                return double.Parse(str);
             }
-            for(int i = period_pos - 1; i > 0; i--)
+
+            // Decimal digits
+            for (int i = 1; i < str.Length - period_pos; i++)
+            {
+                total += (str[i + period_pos] - '0') / Math.Pow(10.0, i);
+            }
+            // Whole digits
+            for (int i = 0; i < period_pos; i++)
             {
                 total += (str[i] - '0') * Math.Pow(10.0, i);
             }
             return total;
         }
-
-        public override string ToString()
-        {
-            return number.ToString();
-        }
-
-        
     }
 
 
