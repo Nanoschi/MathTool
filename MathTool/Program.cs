@@ -21,7 +21,7 @@ namespace MathTool
             }
 
             Console.WriteLine();
-            Expr e = Expr.GenTree(src);
+            Expr e = Expr.CreateTree(src);
             Console.WriteLine("Tree: " + e);
             Console.WriteLine("Value: " + e.Eval());
 

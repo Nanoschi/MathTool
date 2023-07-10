@@ -21,26 +21,30 @@ namespace MathTool
 
     public abstract class Expr : Stmt
     {
-        public static Expr GenTree(string expr)
+        private static Expr CreateValueExpr(Token token)
         {
-            return GenTree(Token.Tokenize(expr));
+            if (token.Type == TokenType.NUMBER)
+            {
+                return new NumberExpr(token.Value);
+            }
+
+            else
+            {
+                return new IdentExpr(token.Value);
+            }
+        }
+        public static Expr CreateTree(string expr)
+        {
+            return CreateTree(Token.Tokenize(expr));
         }
 
-        public static Expr GenTree(List<Token> tokens)
+        public static Expr CreateTree(List<Token> tokens)
         {
             TrimParens(tokens);
 
             if (tokens.Count == 1)
             {
-                if (tokens[0].Type == TokenType.NUMBER)
-                {
-                    return new NumberExpr(tokens[0].Value);
-                }
-
-                else if (tokens[0].Type == TokenType.IDENTIFIER)
-                {
-                    return new IdentExpr(tokens[0].Value);
-                }
+                return CreateValueExpr(tokens[0]);
             }
 
             int first_high_prio = -1;
@@ -70,7 +74,7 @@ namespace MathTool
                 {
                     left = tokens.GetRange(0, i);
                     right = tokens.GetRange(i + 1, tokens.Count - i - 1);
-                    return new BinaryExpr(token.Value, GenTree(left), GenTree(right));
+                    return new BinaryExpr(token.Value, CreateTree(left), CreateTree(right));
                 }
 
                 else if (token.IsHighPrioOp() && first_high_prio == -1)
@@ -81,7 +85,7 @@ namespace MathTool
 
             left = tokens.GetRange(0, first_high_prio);
             right = tokens.GetRange(first_high_prio + 1, tokens.Count - first_high_prio - 1);
-            return new BinaryExpr(tokens[first_high_prio].Value, GenTree(left), GenTree(right));
+            return new BinaryExpr(tokens[first_high_prio].Value, CreateTree(left), CreateTree(right));
 
         }
 
