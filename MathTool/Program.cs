@@ -2,9 +2,11 @@
 using System.Reflection.Metadata.Ecma335;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
+using UnitTests;
 
 namespace MathTool
 {
+    
 
     class Program
     {
@@ -19,6 +21,7 @@ namespace MathTool
             {
                 Console.Write(t);
             }
+            Test.RunFullParserTest();
 
             Console.WriteLine();
             Expr e = Expr.CreateTree(src);
