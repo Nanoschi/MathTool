@@ -69,7 +69,13 @@ namespace MathTool
                     continue;
                 }
 
-                if (token.IsLowPrioOp())
+                if (token.IsSign())
+                {
+                    right = tokens.GetRange(i + 1, tokens.Count - i - 1);
+                    return new UnaryExpr(token.Value, CreateTree(right));
+                }
+
+                else if (token.IsLowPrioOp())
                 {
                     left = tokens.GetRange(0, i);
                     right = tokens.GetRange(i + 1, tokens.Count - i - 1);
@@ -142,11 +148,6 @@ namespace MathTool
 
         }
 
-        public override string ToString()
-        {
-            return $"({left} {op} {right})";
-        }
-
         public override double Eval()
         {
             switch (op)
@@ -163,6 +164,42 @@ namespace MathTool
                     Console.WriteLine("Unknown operator " + op);
                     return 0;
             }
+        }
+        public override string ToString()
+        {
+            return $"({left} {op} {right})";
+        }
+    }
+
+    class UnaryExpr : Expr
+    {
+        string op;
+        Expr value;
+
+        public UnaryExpr(string op, Expr value)
+        {
+            this.Type = ExprType.BIN_EXPR;
+            this.value = value;
+            this.op = op;
+
+        }
+
+        public override double Eval()
+        {
+            switch (op)
+            {
+                case "+":
+                    return +(value.Eval());
+                case "-":
+                    return -(value.Eval());
+                default:
+                    Console.WriteLine("Unknown operator " + op);
+                    return 0;
+            }
+        }
+        public override string ToString()
+        {
+            return $"({op}{value})";
         }
     }
 
@@ -189,26 +226,32 @@ namespace MathTool
 
     class NumberExpr : Expr
     {
-        double number;
+        public double Number;
 
         public NumberExpr(string number)
         {
             this.Type = ExprType.NUMBER;
-            this.number = ExprConversions.StringToDouble(number);
+            this.Number = ExprConversions.StringToDouble(number);
 
         }
 
-        public override double Eval()
+        public NumberExpr(double number)
         {
-            return number;
+            this.Type = ExprType.NUMBER;
+            this.Number = number;
+
         }
 
-        public override string ToString()
-        {
-            return number.ToString();
-        }
+    public override double Eval()
+    {
+        return Number;
+    }
 
-        
+    public override string ToString()
+    {
+        return Number.ToString();
+    }
+
     }
 
     public static class ExprConversions

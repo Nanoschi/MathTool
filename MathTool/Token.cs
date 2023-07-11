@@ -16,6 +16,8 @@ namespace MathTool
         DIVIDE,
         L_PAREN,
         R_PAREN,
+        NEGATIVE,
+        POSITIVE,
     }
 
     public struct Token
@@ -42,6 +44,11 @@ namespace MathTool
         public bool IsLowPrioOp()
         {
             return Type == TokenType.PLUS || Type == TokenType.MINUS;
+        }
+
+        public bool IsSign()
+        {
+            return Type == TokenType.NEGATIVE || Type == TokenType.POSITIVE;
         }
 
         public bool IsParen()
@@ -85,7 +92,38 @@ namespace MathTool
 
                 else if (c == '-')
                 {
-                    tokens.Add(new Token(TokenType.MINUS, "-"));
+                    // Unary
+                    if (tokens.Count == 0) 
+                    {
+                        tokens.Add(new Token(TokenType.NEGATIVE, "-"));
+                    }
+                    else if (tokens[tokens.Count - 1].IsOperator() || tokens[tokens.Count - 1].Type == TokenType.L_PAREN)
+                    {
+                        tokens.Add(new Token(TokenType.NEGATIVE, "-"));
+                    }
+                    // Binary
+                    else
+                    {
+                        tokens.Add(new Token(TokenType.MINUS, "-"));
+                    }
+                }
+
+                else if (c == '+')
+                {
+                    // Unary
+                    if (tokens.Count == 0)
+                    {
+                        tokens.Add(new Token(TokenType.POSITIVE, "+"));
+                    }
+                    else if (tokens[tokens.Count - 1].IsOperator() || tokens[tokens.Count - 1].Type == TokenType.L_PAREN)
+                    {
+                        tokens.Add(new Token(TokenType.POSITIVE, "+"));
+                    }
+                    // Binary
+                    else
+                    {
+                        tokens.Add(new Token(TokenType.PLUS, "+"));
+                    }
                 }
                 else if (c == '*')
                 {
@@ -94,10 +132,6 @@ namespace MathTool
                 else if (c == '/')
                 {
                     tokens.Add(new Token(TokenType.DIVIDE, "/"));
-                }
-                else if (c == '+')
-                {
-                    tokens.Add(new Token(TokenType.PLUS, "+"));
                 }
 
                 else if (IsNumberPart(c))
@@ -170,7 +204,7 @@ namespace MathTool
 
         public override string ToString()
         {
-            return Value + " ";
+            return Type.ToString() + " ";
         }
     }
 }
