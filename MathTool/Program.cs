@@ -27,7 +27,7 @@ namespace MathTool
     {
         static void Main(string[] args)
         {
-            string expr = "(-4 + (-5) + (-3))";
+            string expr = "2 + -(3 + 7) * +(2 + 5)";
             Test.DisplayExpression(expr);
             
             Test.TimeCreateTree(expr, 10_000);

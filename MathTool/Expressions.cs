@@ -44,6 +44,10 @@ namespace MathTool
             {
                 return CreateValueExpr(tokens[0]);
             }
+            else if (tokens.Count == 2)
+            {
+                return new UnaryExpr(tokens[0].Value, CreateValueExpr(tokens[1]));
+            }
 
             int first_high_prio = -1;
             int paren_depth = 0;
@@ -69,11 +73,6 @@ namespace MathTool
                     continue;
                 }
 
-                if (token.IsSign())
-                {
-                    right = tokens.GetRange(i + 1, tokens.Count - i - 1);
-                    return new UnaryExpr(token.Value, CreateTree(right));
-                }
 
                 else if (token.IsLowPrioOp())
                 {
@@ -85,6 +84,11 @@ namespace MathTool
                 else if (token.IsHighPrioOp() && first_high_prio == -1)
                 {
                     first_high_prio = i;
+                }
+                else if (token.IsSign() && tokens[i + 1].Type == TokenType.L_PAREN && i == 0)
+                {
+                    right = tokens.GetRange(i + 1, tokens.Count - i - 1);
+                    return new UnaryExpr(token.Value, CreateTree(right));
                 }
             }
 
