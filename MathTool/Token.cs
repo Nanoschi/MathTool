@@ -18,6 +18,7 @@ namespace MathTool
         R_PAREN,
         NEGATIVE,
         POSITIVE,
+        EXPONENT
     }
 
     public struct Token
@@ -125,13 +126,26 @@ namespace MathTool
                         tokens.Add(new Token(TokenType.PLUS, "+"));
                     }
                 }
-                else if (c == '*')
+                else if (c == '*' && tokens.Count > 0)
                 {
-                    tokens.Add(new Token(TokenType.TIMES, "*"));
+                    if (tokens[tokens.Count - 1].Type == TokenType.TIMES)
+                    {
+                        tokens.RemoveAt(tokens.Count - 1);
+                        tokens.Add(new Token(TokenType.EXPONENT, "**"));
+
+                    }
+                    else
+                    {
+                        tokens.Add(new Token(TokenType.TIMES, "*"));
+                    }
                 }
                 else if (c == '/')
                 {
                     tokens.Add(new Token(TokenType.DIVIDE, "/"));
+                }
+                else if (c == '^')
+                {
+                    tokens.Add(new Token(TokenType.EXPONENT, "**"));
                 }
 
                 else if (IsNumberPart(c))

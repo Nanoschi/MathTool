@@ -50,6 +50,7 @@ namespace MathTool
             }
 
             int first_high_prio = -1;
+            int first_exponent = -1;
             int paren_depth = 0;
 
             List<Token> left;
@@ -85,6 +86,11 @@ namespace MathTool
                 {
                     first_high_prio = i;
                 }
+                else if (token.Type == TokenType.EXPONENT && first_exponent == -1)
+                {
+                    first_exponent = i;
+                }
+
                 else if (token.IsSign() && tokens[i + 1].Type == TokenType.L_PAREN && i == 0)
                 {
                     right = tokens.GetRange(i + 1, tokens.Count - i - 1);
@@ -92,9 +98,19 @@ namespace MathTool
                 }
             }
 
+            if (first_high_prio != -1)
+            {
             left = tokens.GetRange(0, first_high_prio);
             right = tokens.GetRange(first_high_prio + 1, tokens.Count - first_high_prio - 1);
             return new BinaryExpr(tokens[first_high_prio].Value, CreateTree(left), CreateTree(right));
+            }
+
+            else
+            {
+                left = tokens.GetRange(0, first_exponent);
+                right = tokens.GetRange(first_exponent + 1, tokens.Count - first_exponent - 1);
+                return new BinaryExpr(tokens[first_exponent].Value, CreateTree(left), CreateTree(right));
+            }
 
         }
 
@@ -156,14 +172,16 @@ namespace MathTool
         {
             switch (op)
             {
-                case "+":
-                    return left.Eval() + right.Eval();
                 case "*":
                     return left.Eval() * right.Eval();
-                case "/":
-                    return left.Eval() / right.Eval();
+                case "+":
+                    return left.Eval() + right.Eval();
                 case "-":
                     return left.Eval() - right.Eval();
+                case "/":
+                    return left.Eval() / right.Eval();
+                case "**":
+                    return Math.Pow(left.Eval(), right.Eval());
                 default:
                     Console.WriteLine("Unknown operator " + op);
                     return 0;
