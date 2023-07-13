@@ -11,7 +11,7 @@ namespace MathTool
     public enum ExprType
     {
         NUMBER,
-        IDNTIFIER,
+        IDENTIFIER,
         BIN_EXPR
     }
 
@@ -231,7 +231,7 @@ namespace MathTool
 
         public IdentExpr(string ident)
         {
-            this.Type = ExprType.IDNTIFIER;
+            this.Type = ExprType.IDENTIFIER;
             this.ident = ident;
 
         }

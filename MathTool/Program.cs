@@ -27,7 +27,7 @@ namespace MathTool
     {
         static void Main(string[] args)
         {
-            string expr = "2**48 + 1.256";
+            string expr = "(2 + 5) * 6 - 18";
             Test.DisplayExpression(expr);
             
             Test.TimeTokenize(expr);
@@ -38,6 +38,7 @@ namespace MathTool
 
             //MathToolUI ui = new MathToolUI();
             //ui.Run();
+            
 
         }
     }
