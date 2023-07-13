@@ -20,6 +20,8 @@ namespace UnitTests
             ("-1 + (3)", 2),
             ("-(1 + 2)", -3),
             ("4 + -(1 + 2)", 1),
+            ("2**4", 16),
+            ("2^4", 16),
         };
 
         private const string _performance_expr = "((2 + 3) * (5 - 13.5))";

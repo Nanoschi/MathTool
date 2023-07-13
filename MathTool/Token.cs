@@ -18,7 +18,8 @@ namespace MathTool
         R_PAREN,
         NEGATIVE,
         POSITIVE,
-        EXPONENT
+        EXPONENT,
+        STD_FUNCTION ,
     }
 
     public struct Token
@@ -83,7 +84,55 @@ namespace MathTool
 
                 else if (c == '(')
                 {
-                    tokens.Add(new Token(TokenType.L_PAREN, "("));
+                    if (tokens[tokens.Count - 1].Type == TokenType.IDENTIFIER)
+                    {
+                        StringBuilder func = new StringBuilder();
+                        func.Append(tokens[tokens.Count - 1].Value);
+                        tokens.RemoveAt(tokens.Count - 1);
+                        func.Append(c);
+
+                        int paren_depth = 1;
+
+                        while (paren_depth > 0)
+                        {
+                            // Unnecessary in valid function
+                            if (i == length - 1)
+                            {
+                                break;
+                            }
+
+                            if (expr[i + 1] == ' ')
+                            {
+                                i++;
+                                continue;
+                            }
+                            else if (expr[i + 1] == '(')
+                            {
+                                i++;
+                                paren_depth++;
+                                c = expr[i];
+                            }
+                            else if (expr[i + 1] == ')')
+                            {
+                                i++;
+                                paren_depth--;
+                                c = expr[i];
+                            }
+                            else
+                            {
+                                i++;
+                                c = expr[i];
+                            }
+
+                            func.Append(c);
+                        }
+
+                        tokens.Add(new Token(TokenType.STD_FUNCTION, func.ToString()));
+                    }
+                    else
+                    {
+                        tokens.Add(new Token(TokenType.L_PAREN, "("));
+                    }
                 }
 
                 else if (c == ')')
@@ -215,6 +264,14 @@ namespace MathTool
             return tokens;
         }
 
+        public static void WriteTokens(List<Token> tokens)
+        {
+            foreach (Token t in tokens)
+            {
+                Console.Write(t);
+            }
+            Console.Write("\n");
+        }
 
         public override string ToString()
         {

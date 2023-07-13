@@ -27,14 +27,14 @@ namespace MathTool
     {
         static void Main(string[] args)
         {
-            string expr = "2**48 + 1.256";
+            string expr = "2 + (sin( ( x ))) * 6";
             Test.DisplayExpression(expr);
             
             Test.TimeTokenize(expr);
             Test.TimeCreateTree(expr);
             Test.TimeEvalExpr(expr);
             
-            Test.RunFullParserTest();
+            //Test.RunFullParserTest();
 
             //MathToolUI ui = new MathToolUI();
             //ui.Run();
