@@ -27,7 +27,8 @@ namespace MathTool
     {
         static void Main(string[] args)
         {
-            string expr = "2 + (sin( ( x ))) * 6";
+            string expr = "sin(2 + 5)";
+            Console.WriteLine(new StdFuncExpr(expr));
             Test.DisplayExpression(expr);
             
             Test.TimeTokenize(expr);
