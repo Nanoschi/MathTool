@@ -6,28 +6,11 @@ using System.Collections.Generic;
 
 namespace MathTool
 {
-    class MathToolUI
-    {
-        private Dictionary<string, Expr> Variables = new Dictionary<string, Expr>();
-
-        public MathToolUI() { }
-
-        public void Run()
-        {
-            while (true)
-            {
-                string? input = Console.ReadLine();
-                
-
-            }
-        }
-    }
-
     class Program
     {
         static void Main(string[] args)
         {
-            string expr = "sign(-5) * sqrt(2) + sin(cos(12) + 56)";
+            string expr = "sin(2 * 6 - 2) / sqrt(1123 - 234) + ceil(125.23)";
             Test.DisplayExpression(expr);
             
             Test.TimeTokenize(expr);
