@@ -27,8 +27,7 @@ namespace MathTool
     {
         static void Main(string[] args)
         {
-            string expr = "sin(2 + 5)";
-            Console.WriteLine(new StdFuncExpr(expr));
+            string expr = "sign(-5) * sqrt(2) + sin(cos(12) + 56)";
             Test.DisplayExpression(expr);
             
             Test.TimeTokenize(expr);

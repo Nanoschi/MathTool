@@ -290,7 +290,37 @@ namespace MathTool
 
         public override double Eval()
         {
-            return 0;
+            switch (Identifier)
+            {
+                case "sqrt":
+                    return Math.Sqrt(Parameters[0].Eval());
+                case "abs":
+                    return Math.Abs(Parameters[0].Eval());
+                case "sign":
+                    return Math.Sign(Parameters[0].Eval());
+                case "floor":
+                    return Math.Floor(Parameters[0].Eval());
+                case "ceil":
+                    return Math.Ceiling(Parameters[0].Eval());
+
+                case "sin":
+                    return Math.Sin(Parameters[0].Eval());
+                case "cos":
+                    return Math.Cos(Parameters[0].Eval());
+                case "tan":
+                    return Math.Tan(Parameters[0].Eval());
+                case "asin":
+                    return Math.Asin(Parameters[0].Eval());
+                case "acos":
+                    return Math.Acos(Parameters[0].Eval());
+                case "atan":
+                    return Math.Atan(Parameters[0].Eval());
+                default:
+                    Console.WriteLine("Unknown function '" + Identifier + "'");
+                    return 0;
+
+                
+            }
         }
 
         private static Expr[] CreateParamterTrees(string str_params)
