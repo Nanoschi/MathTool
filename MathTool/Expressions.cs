@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
-using System.Transactions;
+﻿using System.Text;
 
 namespace MathTool
 {
@@ -12,7 +6,8 @@ namespace MathTool
     {
         NUMBER,
         IDENTIFIER,
-        BIN_EXPR
+        BIN_EXPR,
+        STD_FUNCTION
     }
 
     public abstract class Expr
@@ -24,6 +19,10 @@ namespace MathTool
             if (token.Type == TokenType.NUMBER)
             {
                 return new NumberExpr(token.Value);
+            }
+            else if (token.Type == TokenType.STD_FUNCTION)
+            {
+                return new StdFuncExpr(token.Value);
             }
 
             else
@@ -273,6 +272,91 @@ namespace MathTool
     {
         return Number.ToString();
     }
+
+    }
+
+    class StdFuncExpr : Expr
+    {
+        public string Identifier;
+        public Expr[] Parameters;
+
+        public StdFuncExpr(string func)
+        {
+            this.Type = ExprType.STD_FUNCTION;
+            this.Identifier = func.Substring(0, func.IndexOf('('));
+            this.Parameters = CreateParamterTrees(func.Substring(Identifier.Length, func.Length - Identifier.Length));
+
+        }
+
+        public override double Eval()
+        {
+            switch (Identifier)
+            {
+                case "sqrt":
+                    return Math.Sqrt(Parameters[0].Eval());
+                case "abs":
+                    return Math.Abs(Parameters[0].Eval());
+                case "sign":
+                    return Math.Sign(Parameters[0].Eval());
+                case "floor":
+                    return Math.Floor(Parameters[0].Eval());
+                case "ceil":
+                    return Math.Ceiling(Parameters[0].Eval());
+
+                case "sin":
+                    return Math.Sin(Parameters[0].Eval());
+                case "cos":
+                    return Math.Cos(Parameters[0].Eval());
+                case "tan":
+                    return Math.Tan(Parameters[0].Eval());
+                case "asin":
+                    return Math.Asin(Parameters[0].Eval());
+                case "acos":
+                    return Math.Acos(Parameters[0].Eval());
+                case "atan":
+                    return Math.Atan(Parameters[0].Eval());
+                default:
+                    Console.WriteLine("Unknown function '" + Identifier + "'");
+                    return 0;
+
+                
+            }
+        }
+
+        private static Expr[] CreateParamterTrees(string str_params)
+        {
+            str_params = str_params.TrimStart('(');
+            str_params = str_params.TrimEnd(')');
+
+            int last_end = 0;
+            int current = 0;
+            List<Expr> parameters = new List<Expr>();
+
+            foreach (char c in str_params)
+            {
+                current++;
+                if (c == ',')
+                {
+                    parameters.Add(Expr.CreateTree(str_params.Substring(last_end, current - 1)));
+                    last_end = current;
+                } 
+            }
+            parameters.Add(Expr.CreateTree(str_params.Substring(last_end, current - last_end)));
+            return parameters.ToArray();
+        }
+
+        public override string ToString()
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.Append(Identifier + "(");
+            for (int i = 0; i < Parameters.Length - 1; i++)
+            {
+                sb.Append(Parameters[i].ToString() + ", ");
+            }
+            sb.Append(Parameters[Parameters.Length - 1].ToString());
+            sb.Append(")");
+            return sb.ToString();
+        }
 
     }
 
